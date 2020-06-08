@@ -4,7 +4,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - id: hello
-        uses: toruta39/post-release@latest
+        uses: toruta39/post-release
         with:
           who-to-greet: 'someone'
           repo-token: '${{ secrets.GITHUB_TOKEN }}'
