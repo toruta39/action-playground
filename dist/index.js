@@ -8309,8 +8309,12 @@ const { findPreviousRelease, findCurrentRelease } = __webpack_require__(713)
     // get the reference to current commit
     const current = await findCurrentRelease()
 
+    // Get the JSON webhook payload for the event that triggered the workflow
+    const payload = JSON.stringify(github.context.payload, undefined, 2)
+    console.log(`The event payload: ${payload}`);
+
     // get changelist
-    const changelist = await getChangelist(previous.ref, current.ref)
+    const changelist = await getChangelist(payload.before, payload.after)
 
     // get watchlist input
     const watchlist = core.getInput('watchlist')
@@ -8320,9 +8324,6 @@ const { findPreviousRelease, findCurrentRelease } = __webpack_require__(713)
     // if so, set hit as true
     core.setOutput('hit', true)
 
-    // Get the JSON webhook payload for the event that triggered the workflow
-    const payload = JSON.stringify(github.context.payload, undefined, 2)
-    console.log(`The event payload: ${payload}`);
   } catch (error) {
     core.setFailed(`${error.message}: ${error.stack}`);
   }
