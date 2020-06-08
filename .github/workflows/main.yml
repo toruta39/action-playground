@@ -1,0 +1,11 @@
+on: [push]
+jobs:
+  some_job:
+    runs-on: ubuntu-latest
+    steps:
+      - id: hello
+        uses: toruta39/post-release@0.0.1
+        with:
+          who-to-greet: 'someone'
+      - run: |
+        echo "time: ${{ steps.hello.outputs.time }}"
