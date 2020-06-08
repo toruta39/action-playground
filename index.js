@@ -26,7 +26,7 @@ const { findPreviousRelease, findCurrentRelease } = require('./lib/releases')
     core.setOutput('changelist', 'TODO')
     // grep the changelist if any change occurred on watchlist
     // if so, set hit as true
-    core.setOuput('hit', true)
+    core.setOutput('hit', true)
 
     // Get the JSON webhook payload for the event that triggered the workflow
     const payload = JSON.stringify(github.context.payload, undefined, 2)
