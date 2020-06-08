@@ -8259,19 +8259,40 @@ function register (state, name, method, options) {
 
 const core = __webpack_require__(171);
 const github = __webpack_require__(755);
+const { findPreviousRelease, findCurrentRelease } = __webpack_require__(713)
 
-try {
-  // `who-to-greet` input defined in action metadata file
-  const nameToGreet = core.getInput('who-to-greet');
-  console.log(`Hello ${nameToGreet}!`);
-  const time = (new Date()).toTimeString();
-  core.setOutput("time", time);
-  // Get the JSON webhook payload for the event that triggered the workflow
-  const payload = JSON.stringify(github.context.payload, undefined, 2)
-  console.log(`The event payload: ${payload}`);
-} catch (error) {
-  core.setFailed(error.message);
-}
+;(async () => {
+  try {
+    // `who-to-greet` input defined in action metadata file
+    const nameToGreet = core.getInput('who-to-greet');
+    console.log(`Hello ${nameToGreet}!`);
+    const time = (new Date()).toTimeString();
+    core.setOutput('time', time);
+
+
+    // get the reference to previous release
+    const previous = await findPreviousRelease()
+    // get the reference to current commit
+    const current = await findCurrentRelease()
+
+    // get changelist
+    const changelist = await getChangelist(previous.ref, current.ref)
+
+    // get watchlist input
+    const watchlist = core.getInput('watchlist')
+    // set changelist output
+    core.setOutput('changelist', 'TODO')
+    // grep the changelist if any change occurred on watchlist
+    // if so, set hit as true
+    core.setOuput('hit', true)
+
+    // Get the JSON webhook payload for the event that triggered the workflow
+    const payload = JSON.stringify(github.context.payload, undefined, 2)
+    console.log(`The event payload: ${payload}`);
+  } catch (error) {
+    core.setFailed(error.message);
+  }
+})()
 
 
 /***/ }),
@@ -8954,6 +8975,55 @@ function processEmit (ev, arg) {
   } else {
     return originalProcessEmit.apply(this, arguments)
   }
+}
+
+
+/***/ }),
+
+/***/ 713:
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
+
+const core = __webpack_require__(171);
+const github = __webpack_require__(755);
+
+const token = core.getInput('repo-token')
+const { graphql } = github.getOctokit(token)
+
+exports.findReleases = async function() {
+  const query = `
+    query($owner: String!, $name: String!) { 
+      repository(owner: $owner, name: $name) {
+        nameWithOwner
+        releases(last: 2, orderBy: {field: CREATED_AT, direction: DESC}) {
+          totalCount
+          edges {
+            node {
+              tagName
+            }
+          }
+        }
+      }
+    }
+  `
+
+  const result = graphql(query, {
+    owner: 'rakuten-games',
+    name: 'viber-play-sdk',
+  })
+
+  console.log(result)
+
+  return result
+}
+
+exports.findPreviousRelease = async function() {
+  exports.findReleases()
+  return {}
+}
+
+exports.findCurrentRelease = async function() {
+  exports.findReleases()
+  return {}
 }
 
 
