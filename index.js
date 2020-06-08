@@ -16,7 +16,7 @@ try {
   const current = await findCurrentRelease()
 
   // get changelist
-  const changelist = ''
+  const changelist = await getChangelist(previous.ref, current.ref)
 
   // get watchlist input
   const watchlist = core.getInput('watchlist')
