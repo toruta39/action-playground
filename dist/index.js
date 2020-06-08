@@ -9940,7 +9940,7 @@ const { findPreviousRelease, findCurrentRelease } = __webpack_require__(713)
     const payload = JSON.stringify(github.context.payload, undefined, 2)
     console.log(`The event payload: ${payload}`);
   } catch (error) {
-    core.setFailed(error.message);
+    core.setFailed(`${error.message}: ${error.stack}`);
   }
 })()
 
