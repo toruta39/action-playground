@@ -65,14 +65,15 @@ const { spawn } = __webpack_require__(129)
 exports.getChangelist = function (...args) {
   console.log(`dirname: ${__dirname}`)
 
-  const gitDiff = spawn('git', ['diff', '--name-only', ...args])
+  // const gitDiff = spawn('git', ['diff', '--name-only', ...args])
+  const gitDiff = spawn('git', ['status'])
 
   return new Promise((resolve, reject) => {
     gitDiff.on('data', (data) => {
       console.log(data.toString())
     })
 
-    gitDiff.on('close', (code) => {
+    gitDiff.on('close', () => {
       resolve([])
     })
     gitDiff.on('error', reject)
@@ -8311,7 +8312,7 @@ const { findPreviousRelease, findCurrentRelease } = __webpack_require__(713)
 
     // Get the JSON webhook payload for the event that triggered the workflow
     const payload = JSON.stringify(github.context.payload, undefined, 2)
-    console.log(`The event payload: ${payload}`);
+    // console.log(`The event payload: ${payload}`);
 
     // get changelist
     const changelist = await getChangelist(payload.before, payload.after)
