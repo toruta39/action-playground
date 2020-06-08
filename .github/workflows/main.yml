@@ -7,5 +7,4 @@ jobs:
         uses: toruta39/post-release@0.0.1
         with:
           who-to-greet: 'someone'
-      - run: |
-        echo "time: ${{ steps.hello.outputs.time }}"
+      - run: echo "time: ${{ steps.hello.outputs.time }}"
