@@ -5,9 +5,20 @@ inputs:
     description: 'Who to greet'
     required: true
     default: 'World'
+  repo-token:
+    description: 'Github token'
+    required: true
+    default: ''
+  watchlist:
+    description: 'Some files to watch'
+    default: ''
 outputs:
   time: # id of output
     description: 'The time we greeted you'
+  changelist: # id of output
+    description: 'The changelist'
+  hit: # id of output
+    description: 'If hit on watchlist'
 runs:
   using: 'node12'
   main: 'dist/index.js'
