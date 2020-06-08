@@ -11,4 +11,4 @@ jobs:
       - run: |
           echo "time: ${{ steps.hello.outputs.time }}"
           echo "changelist: ${{ steps.hello.outputs.changelist }}"
-          echo ": ${{ steps.hello.outputs.changelist }}"
+          echo "hit: ${{ steps.hello.outputs.hit }}"
