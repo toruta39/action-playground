@@ -8300,6 +8300,7 @@ const { getChangelist } = __webpack_require__(1)
 
 ;(async () => {
   try {
+    console.log(JSON.stringify(github.context.payload))
     const changelist = await getChangelist(github.context.payload.before, github.context.payload.after)
     core.setOutput('changelist', changelist)
 
