@@ -6,9 +6,7 @@ jobs:
       - uses: actions/checkout@v2
       - run: git branch --all
       - run: git fetch origin ${{github.base_ref}}
-      - id: ls
-        run: echo "::set-output name=stat::`ls`"
-      - run: echo "${{steps.ls.outputs.stat}}"
+      - run: git branch --all
       - id: diff
         run: echo "::set-output name=stat::`git diff --stat ${{github.base_ref}} ${{github.sha}}`"
       - run: echo "${{steps.diff.outputs.stat}}"
