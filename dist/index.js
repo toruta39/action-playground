@@ -66,7 +66,7 @@ exports.getChangelist = function (...args) {
   console.log(`cwd: ${process.env.GITHUB_WORKSPACE}`)
 
   // const gitDiff = spawn('git', ['diff', '--name-only', ...args], { cwd: process.env.GITHUB_WORKSPACE })
-  const gitDiff = spawn('git', ['status'], { cwd: process.env.GITHUB_WORKSPACE })
+  const gitDiff = spawn('git', ['version'], { cwd: process.env.GITHUB_WORKSPACE })
 
   return new Promise((resolve, reject) => {
     const result = [] 
