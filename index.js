@@ -14,6 +14,6 @@ const { getChangelist } = require('./lib/git')
     core.setOutput('hit', true)
 
   } catch (error) {
-    core.setFailed(`${error.message}`)
+    core.setFailed(`${error.message}: ${error.stack}`)
   }
 })()
