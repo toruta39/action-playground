@@ -63,7 +63,7 @@ const { spawn } = __webpack_require__(129)
 // }
 
 exports.getChangelist = function (...args) {
-  console.log(`dirname: ${__dirname}`)
+  console.log(`cwd: ${process.env.GITHUB_WORKSPACE}`)
 
   const gitDiff = spawn('git', ['diff', '--name-only', ...args], { cwd: process.env.GITHUB_WORKSPACE })
 
@@ -74,6 +74,7 @@ exports.getChangelist = function (...args) {
     })
 
     gitDiff.on('close', () => {
+      console.log(result)
       resolve(result.filter(i => i))
     })
     gitDiff.on('error', reject)
