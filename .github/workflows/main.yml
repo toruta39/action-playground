@@ -5,11 +5,14 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: |
-          git fetch origin ${{github.base_ref}}
-          git checkout ${{github.base_ref}}
-          git checkout ${{github.sha}}
-      - id: post-release
+          git fetch origin ${{ github.base_ref }}
+          git checkout ${{ github.base_ref }}
+          git checkout ${{ github.head_ref }}
+      - id: check_pr_changes
         uses: toruta39/post-release@master
-      - run: |
-          echo "changelist: ${{ steps.post-release.outputs.changelist }}"
-          echo "hit: ${{ steps.post-release.outputs.hit }}"
+        with: 
+          watchlist: |
+            README.md
+      - if: ${{steps.check_pr_changes.outputs.hit == 'true'}}
+        run: echo "hit"
+      - run: echo "changelist: \n${{ steps.check_pr_changes.outputs.changelist }}"
