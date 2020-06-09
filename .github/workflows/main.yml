@@ -8,6 +8,7 @@ jobs:
         with:
           who-to-greet: 'someone'
           repo-token: '${{ secrets.GITHUB_TOKEN }}'
+      - run: pwd
       - run: git diff --name-only
       - run: |
           echo "time: ${{ steps.hello.outputs.time }}"
