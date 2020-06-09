@@ -12,10 +12,10 @@ const { findPreviousRelease, findCurrentRelease } = require('./lib/releases')
     core.setOutput('time', time);
 
 
-    // get the reference to previous release
-    const previous = await findPreviousRelease()
-    // get the reference to current commit
-    const current = await findCurrentRelease()
+    // // get the reference to previous release
+    // const previous = await findPreviousRelease()
+    // // get the reference to current commit
+    // const current = await findCurrentRelease()
 
     // Get the JSON webhook payload for the event that triggered the workflow
     const payload = JSON.stringify(github.context.payload, undefined, 2)
@@ -27,7 +27,7 @@ const { findPreviousRelease, findCurrentRelease } = require('./lib/releases')
     // get watchlist input
     const watchlist = core.getInput('watchlist')
     // set changelist output
-    core.setOutput('changelist', 'TODO')
+    core.setOutput('changelist', changelist)
     // grep the changelist if any change occurred on watchlist
     // if so, set hit as true
     core.setOutput('hit', true)
