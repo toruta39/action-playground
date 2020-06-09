@@ -52,34 +52,18 @@ module.exports =
 /***/ 1:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
-const { spawn } = __webpack_require__(129)
-
-// const simpleGit = require('simple-git')
-// const git = simpleGit()
-//
-// exports.getChangelist = async function (from, to) {
-//   const output = await git.diff(['--name-only', from, to])
-//   return output.split('\n').filter(i => i)
-// }
+const { exec } = __webpack_require__(129)
 
 exports.getChangelist = function (...args) {
-  const gitDiff = spawn('git', ['diff', '--name-only', ...args], { cwd: process.env.GITHUB_WORKSPACE })
-
   return new Promise((resolve, reject) => {
-    const result = [] 
-    gitDiff.stdout.on('data', (data) => {
-      result.push(...(data.toString().split('\n')))
-    })
+    exec(['git', 'diff', '--name-only', ...args].join(' '), { cwd: process.env.GITHUB_WORKSPACE }, (err, stdout, stderr) => {
+      if (err) {
+        console.error(stderr)
+        reject(err)
+      }
 
-    gitDiff.stderr.on('data', (data) => {
-      console.error(data.toString())
+      resolve(stdout)
     })
-
-    gitDiff.on('close', () => {
-      resolve(result.filter(i => i))
-    })
-
-    gitDiff.on('error', reject)
   })
 }
 
