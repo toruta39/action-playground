@@ -8,8 +8,8 @@ jobs:
           git fetch origin ${{github.base_ref}}
           git checkout ${{github.base_ref}}
           git checkout ${{github.sha}}
-      - id: hello
-        uses: toruta39/post-release@test-pr
+      - id: post-release
+        uses: toruta39/post-release@master
       - run: |
-          echo "changelist: ${{ steps.hello.outputs.changelist }}"
-          echo "hit: ${{ steps.hello.outputs.hit }}"
+          echo "changelist: ${{ steps.post-release.outputs.changelist }}"
+          echo "hit: ${{ steps.post-release.outputs.hit }}"

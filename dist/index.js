@@ -8294,7 +8294,7 @@ const { getChangelist } = __webpack_require__(1)
     core.setOutput('hit', true)
 
   } catch (error) {
-    core.setFailed(`${error.message}`)
+    core.setFailed(`${error.message}: ${error.stack}`)
   }
 })()
 
