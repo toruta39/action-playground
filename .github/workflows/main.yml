@@ -1,4 +1,4 @@
-on: pull_request
+on: [push, pull_request]
 jobs:
   some_job:
     runs-on: ubuntu-latest
@@ -7,10 +7,6 @@ jobs:
       - run: git fetch origin ${{github.base_ref}}
       - run: git checkout ${{github.base_ref}}
       - run: git checkout ${{github.sha}}
-      - run: git branch
-      - id: diff
-        run: echo "::set-output name=stat::`git diff --stat ${{github.base_ref}} ${{github.sha}}`"
-      - run: echo "${{steps.diff.outputs.stat}}"
       - id: hello
         uses: toruta39/post-release@master
       - run: |
