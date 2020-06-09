@@ -3,6 +3,7 @@ jobs:
   some_job:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - id: hello
         uses: toruta39/post-release@master
         with:
