@@ -1,10 +1,6 @@
 name: 'Hello World'
 description: 'Greet someone and record the time'
 inputs:
-  who-to-greet:  # id of input
-    description: 'Who to greet'
-    required: true
-    default: 'World'
   repo-token:
     description: 'Github token'
     required: true
@@ -13,11 +9,9 @@ inputs:
     description: 'Some files to watch'
     default: ''
 outputs:
-  time: # id of output
-    description: 'The time we greeted you'
-  changelist: # id of output
+  changelist:
     description: 'The changelist'
-  hit: # id of output
+  hit:
     description: 'If hit on watchlist'
 runs:
   using: 'node12'

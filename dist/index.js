@@ -65,8 +65,7 @@ const { spawn } = __webpack_require__(129)
 exports.getChangelist = function (...args) {
   console.log(`cwd: ${process.env.GITHUB_WORKSPACE}`)
 
-  // const gitDiff = spawn('git', ['diff', '--name-only', ...args], { cwd: process.env.GITHUB_WORKSPACE })
-  const gitDiff = spawn('git', ['version'], { cwd: process.env.GITHUB_WORKSPACE })
+  const gitDiff = spawn('git', ['diff', '--name-only', ...args], { cwd: process.env.GITHUB_WORKSPACE })
 
   return new Promise((resolve, reject) => {
     const result = [] 
@@ -75,13 +74,13 @@ exports.getChangelist = function (...args) {
     })
 
     gitDiff.stderr.on('data', (data) => {
-      result.push(...(data.toString().split('\n')))
+      console.error(data.toString())
     })
 
     gitDiff.on('close', () => {
-      console.log(result)
       resolve(result.filter(i => i))
     })
+
     gitDiff.on('error', reject)
   })
 }
@@ -8297,42 +8296,22 @@ function register (state, name, method, options) {
 /***/ 622:
 /***/ (function(__unusedmodule, __unusedexports, __webpack_require__) {
 
-const core = __webpack_require__(171);
-const github = __webpack_require__(755);
+const core = __webpack_require__(171)
+const github = __webpack_require__(755)
 const { getChangelist } = __webpack_require__(1)
-const { findPreviousRelease, findCurrentRelease } = __webpack_require__(713)
 
 ;(async () => {
   try {
-    // `who-to-greet` input defined in action metadata file
-    const nameToGreet = core.getInput('who-to-greet');
-    console.log(`Hello ${nameToGreet}!`);
-    const time = (new Date()).toTimeString();
-    core.setOutput('time', time);
-
-
-    // // get the reference to previous release
-    // const previous = await findPreviousRelease()
-    // // get the reference to current commit
-    // const current = await findCurrentRelease()
-
-    // Get the JSON webhook payload for the event that triggered the workflow
-    const payload = JSON.stringify(github.context.payload, undefined, 2)
-    // console.log(`The event payload: ${payload}`);
-
-    // get changelist
-    const changelist = await getChangelist(payload.before, payload.after)
-
-    // get watchlist input
-    const watchlist = core.getInput('watchlist')
-    // set changelist output
+    const changelist = await getChangelist(github.context.payload.before, github.context.payload.after)
     core.setOutput('changelist', changelist)
+
+    const watchlist = core.getInput('watchlist')
     // grep the changelist if any change occurred on watchlist
     // if so, set hit as true
     core.setOutput('hit', true)
 
   } catch (error) {
-    core.setFailed(`${error.message}: ${error.stack}`);
+    core.setFailed(`${error.message}`)
   }
 })()
 
@@ -9017,55 +8996,6 @@ function processEmit (ev, arg) {
   } else {
     return originalProcessEmit.apply(this, arguments)
   }
-}
-
-
-/***/ }),
-
-/***/ 713:
-/***/ (function(__unusedmodule, exports, __webpack_require__) {
-
-const core = __webpack_require__(171);
-const github = __webpack_require__(755);
-
-const token = core.getInput('repo-token')
-const { graphql } = github.getOctokit(token)
-
-exports.findReleases = async function() {
-  const query = `
-    query($owner: String!, $name: String!) { 
-      repository(owner: $owner, name: $name) {
-        nameWithOwner
-        releases(last: 2, orderBy: {field: CREATED_AT, direction: DESC}) {
-          totalCount
-          edges {
-            node {
-              tagName
-            }
-          }
-        }
-      }
-    }
-  `
-
-  const result = graphql(query, {
-    owner: 'rakuten-games',
-    name: 'viber-play-sdk',
-  })
-
-  console.log(result)
-
-  return result
-}
-
-exports.findPreviousRelease = async function() {
-  exports.findReleases()
-  return {}
-}
-
-exports.findCurrentRelease = async function() {
-  exports.findReleases()
-  return {}
 }
 
 

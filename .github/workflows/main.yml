@@ -7,11 +7,7 @@ jobs:
       - id: hello
         uses: toruta39/post-release@master
         with:
-          who-to-greet: 'someone'
           repo-token: '${{ secrets.GITHUB_TOKEN }}'
-      - run: pwd
-      - run: git diff --name-only
       - run: |
-          echo "time: ${{ steps.hello.outputs.time }}"
           echo "changelist: ${{ steps.hello.outputs.changelist }}"
           echo "hit: ${{ steps.hello.outputs.hit }}"
