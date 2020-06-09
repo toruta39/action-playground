@@ -4,10 +4,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - id: ls
+        run: echo "::set-output name=stat::`ls`"
+      - run: echo "${{steps.ls.outputs.stat}}"
+      - id: diff
+        run: echo "::set-output name=stat::`git diff --stat`"
+      - run: echo "${{steps.diff.outputs.stat}}"
       - id: hello
         uses: toruta39/post-release@master
-        with:
-          repo-token: '${{ secrets.GITHUB_TOKEN }}'
       - run: |
           echo "changelist: ${{ steps.hello.outputs.changelist }}"
           echo "hit: ${{ steps.hello.outputs.hit }}"
