@@ -6,7 +6,6 @@ const { getChangelist } = require('./lib/git')
 
 ;(async () => {
   try {
-    console.log(JSON.stringify(github.context.payload))
     const changelist = await getChangelist(github.context.payload.pull_request.base.ref, github.context.payload.pull_request.head.ref)
     core.setOutput('changelist', changelist)
 

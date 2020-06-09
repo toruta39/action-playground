@@ -1,18 +1,14 @@
-name: 'Hello World'
-description: 'Greet someone and record the time'
+name: 'Check PR changes'
+description: 'Check PR changed files and report if there is any change occurred on watchlist'
 inputs:
-  repo-token:
-    description: 'Github token'
-    required: true
-    default: ''
   watchlist:
-    description: 'Some files to watch'
+    description: 'List of file patterns to watch'
     default: ''
 outputs:
   changelist:
-    description: 'The changelist'
+    description: 'list of changed files'
   hit:
-    description: 'If hit on watchlist'
+    description: 'Whether there is change occured on watchlist'
 runs:
   using: 'node12'
   main: 'dist/index.js'
