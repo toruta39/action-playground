@@ -1,9 +1,11 @@
-on: [push, pull_request, release]
+on: pull_request
 jobs:
   some_job:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - run: git branch --all
       - run: git fetch origin ${{github.base_ref}}
       - run: git branch --all
