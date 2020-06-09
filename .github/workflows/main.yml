@@ -6,6 +6,8 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
+      - run: git branch
+      - run: git branch --all
       - id: ls
         run: echo "::set-output name=stat::`ls`"
       - run: echo "${{steps.ls.outputs.stat}}"
