@@ -8,7 +8,7 @@ jobs:
         run: echo "::set-output name=stat::`ls`"
       - run: echo "${{steps.ls.outputs.stat}}"
       - id: diff
-        run: echo "::set-output name=stat::`git diff --stat`"
+        run: echo "::set-output name=stat::`git diff --stat ${{github.base_ref}} ${{github.head_ref}}`"
       - run: echo "${{steps.diff.outputs.stat}}"
       - id: hello
         uses: toruta39/post-release@master
