@@ -4,11 +4,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: git fetch origin ${{github.base_ref}}
-      - run: git checkout ${{github.base_ref}}
-      - run: git checkout ${{github.sha}}
+      - run: |
+          git fetch origin ${{github.base_ref}}
+          git checkout ${{github.base_ref}}
+          git checkout ${{github.sha}}
       - id: hello
-        uses: toruta39/post-release@master
+        uses: toruta39/post-release@test-pr
       - run: |
           echo "changelist: ${{ steps.hello.outputs.changelist }}"
           echo "hit: ${{ steps.hello.outputs.hit }}"
