@@ -45,8 +45,6 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     steps:
-      - run: |
-          echo "${{toJSON(needs.bootstrap.outputs)}}"
       - uses: actions/checkout@v2
         with:
           ref: ${{needs.bootstrap.outputs.ref}}
@@ -68,8 +66,6 @@ jobs:
     if: ${{needs.bootstrap.outputs.needs-build == 'true'}}
     runs-on: ubuntu-latest
     steps:
-      - run: |
-          echo "${{toJSON(needs.bootstrap.outputs)}}"
       - uses: actions/checkout@v2
         with:
           ref: ${{needs.bootstrap.outputs.ref}}
