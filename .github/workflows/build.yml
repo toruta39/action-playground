@@ -5,12 +5,12 @@ on:
       - .github/workflows/build.yml
       - client/**
   repository_dispatch:
-    types: [build]
+    types: ["build:production", "build:staging"]
 jobs:
   debug:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "${{toJSON(github.event)}}"
+      - run: echo "${{toJSON(github)}}"
   test:
     name: Test
     runs-on: ubuntu-latest
