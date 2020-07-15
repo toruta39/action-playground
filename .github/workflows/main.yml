@@ -9,7 +9,7 @@ jobs:
           git checkout ${{ github.base_ref }}
           git checkout ${{ github.head_ref }}
       - id: check_pr_changes
-        uses: toruta39/post-release@master
+      uses: toruta39/action-playground/actions/post-release@master
         with: 
           watchlist: |
             README.md
