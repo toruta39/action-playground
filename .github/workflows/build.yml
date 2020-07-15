@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       ref: ${{steps.set-ref.outputs.ref}}
+      env: ${{steps.set-ref.outputs.env}}
       needs-build: ${{steps.set-needs-build.outputs.needs-build}}
     steps:
       - run: echo "${{toJSON(github)}}"
@@ -19,11 +20,14 @@ jobs:
           if [ "${{github.event_name}}" = 'repository_dispatch' ]; then
             if [ "${{endsWith(github.event.action, ':production')}}" = 'true' ]; then
               echo '::set-output name=ref::refs/heads/master'
+              echo '::set-output name=env::production'
             else
               echo '::set-output name=ref::refs/heads/develop'
+              echo '::set-output name=env::staging'
             fi
           else
             echo "::set-output name=ref::${{github.ref}}"
+            echo '::set-output name=env::development'
           fi
       - id: set-needs-build
         run: |
@@ -78,7 +82,10 @@ jobs:
           npm install
         working-directory: client
       - name: Build
+        with:
+          NODE_ENV: ${{needs.bootstrap.outputs.env}}}
         run: |
+          echo $NODE_ENV
           npm run build
         working-directory: client
       - name: Alert
