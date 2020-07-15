@@ -82,7 +82,7 @@ jobs:
           npm install
         working-directory: client
       - name: Build
-        with:
+        env:
           NODE_ENV: ${{needs.bootstrap.outputs.env}}}
         run: |
           echo $NODE_ENV
