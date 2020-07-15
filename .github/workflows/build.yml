@@ -5,6 +5,7 @@ on:
       - .github/workflows/build.yml
       - client/**
   repository_dispatch:
+    types: [build]
 jobs:
   debug:
     runs-on: ubuntu-latest
