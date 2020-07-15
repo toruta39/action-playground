@@ -1,17 +1,17 @@
-name: Tag release
+name: tag
 on:
   push:
     tags: 
       - 'v*'
 jobs:
   release:
-    name: Tag release
+    name: Tag and release
     runs-on: ubuntu-latest
     steps:
     - name: Get version
       id: get_version
       run: echo ::set-output name=version::${GITHUB_REF#refs\/tags\//}
-    - name: Tag release
+    - name: Draft release
       uses: actions/create-release@latest
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
