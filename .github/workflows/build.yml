@@ -18,9 +18,9 @@ jobs:
         run: |
           if [ "${{github.event_name}}" = "repository_dispatch" ]; then
             if [ "${{github.event.action}}" = "build:production" ]; then
-              echo "::set-output name=ref::refs/branch/master"
+              echo "::set-output name=ref::refs/heads/master"
             else
-              echo "::set-output name=ref::refs/branch/develop"
+              echo "::set-output name=ref::refs/heads/develop"
             fi
           else
             echo "::set-output name=ref::${{github.ref}}"
