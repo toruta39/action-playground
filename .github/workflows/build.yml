@@ -4,8 +4,6 @@ on:
     paths:
       - .github/workflows/build.yml
       - client/**
-    tags:
-      - v*
   repository_dispatch:
     types: ['build:production', 'build:staging']
 jobs:
@@ -40,7 +38,11 @@ jobs:
               echo '::set-output name=needs-build::false'
             fi
           else
-            echo '::set-output name=needs-build::false'
+            if [ "${{startsWith(github.ref, 'refs/tags/v')}}" = 'true ]; then
+              echo '::set-output name=needs-build::true'
+            else
+              echo '::set-output name=needs-build::false'
+            fi
           fi
   test:
     needs: bootstrap
