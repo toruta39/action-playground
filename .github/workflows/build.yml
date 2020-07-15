@@ -28,7 +28,7 @@ jobs:
       - id: set-needs-build
         run: |
           if [ "${{github.event_name}}" = "repository_dispatch" ]; then
-            if [ "${{contains(github.event.action, "build:")}}" = "true" ]; then
+            if [ "${{contains(github.event.action, 'build:')}}" = "true" ]; then
               echo "::set-output name=needs-build::true"
             else
               echo "::set-output name=needs-build::false"
