@@ -5,7 +5,7 @@ on:
       - .github/workflows/build.yml
       - client/**
   repository_dispatch:
-    types: ["build:production", "build:staging"]
+    types: ['build:production', 'build:staging']
 jobs:
   bootstrap:
     runs-on: ubuntu-latest
@@ -16,25 +16,25 @@ jobs:
       - run: echo "${{toJSON(github)}}"
       - id: set-ref
         run: |
-          if [ "${{github.event_name}}" = "repository_dispatch" ]; then
-            if [ "${{github.event.action}}" = "build:production" ]; then
-              echo "::set-output name=ref::refs/heads/master"
+          if [ "${{github.event_name}}" = 'repository_dispatch' ]; then
+            if [ "${{endsWith(github.event.action, ':production')}}" = 'true' ]; then
+              echo '::set-output name=ref::refs/heads/master'
             else
-              echo "::set-output name=ref::refs/heads/develop"
+              echo '::set-output name=ref::refs/heads/develop'
             fi
           else
             echo "::set-output name=ref::${{github.ref}}"
           fi
       - id: set-needs-build
         run: |
-          if [ "${{github.event_name}}" = "repository_dispatch" ]; then
-            if [ "${{contains(github.event.action, 'build:')}}" = "true" ]; then
-              echo "::set-output name=needs-build::true"
+          if [ "${{github.event_name}}" = 'repository_dispatch' ]; then
+            if [ "${{startsWith(github.event.action, 'build:')}}" = 'true' ]; then
+              echo '::set-output name=needs-build::true'
             else
-              echo "::set-output name=needs-build::false"
+              echo '::set-output name=needs-build::false'
             fi
           else
-            echo "::set-output name=needs-build::false"
+            echo '::set-output name=needs-build::false'
           fi
   test:
     needs: bootstrap
