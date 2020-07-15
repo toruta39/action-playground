@@ -7,15 +7,45 @@ on:
   repository_dispatch:
     types: ["build:production", "build:staging"]
 jobs:
-  debug:
+  bootstrap:
     runs-on: ubuntu-latest
+    outputs:
+      ref: ${{steps.set-ref.outputs.ref}}
+      needs-build: ${{steps.set-needs-build.outputs.needs-build}}
     steps:
       - run: echo "${{toJSON(github)}}"
+      - id: set-ref
+        run: |
+        if [ "${{github.event_name}}" = "repository_dispatch" ]; then
+          if [ "${{github.event.action}} = "build:production" ]; then
+            echo "::set-output name=ref::refs/branch/master"
+          else
+            echo "::set-output name=ref::refs/branch/develop"
+          fi
+        else
+          echo "::set-output name=ref::${{github.ref}}"
+        fi
+      - id: set-needs-build
+        run: |
+        if [ "${{github.event_name}}" = "repository_dispatch" ]; then
+          if [ ${{contains(github.event.action, "build:")}} = "true" ]; then
+            echo "::set-output name=needs-build::true"
+          else
+            echo "::set-output name=needs-build::false"
+          fi
+        else
+          echo "::set-output name=needs-build::false"
+        fi
   test:
+    needs: bootstrap
     name: Test
     runs-on: ubuntu-latest
     steps:
+      - run: |
+        echo "${{toJSON(needs.bootstrap.outputs)}}"
       - uses: actions/checkout@v2
+        with:
+          ref: ${{needs.bootstrap.outputs.ref}}
       - name: Use Node.js 12.16
         uses: actions/setup-node@v1
         with:
@@ -30,11 +60,15 @@ jobs:
         working-directory: client
   build:
     name: Build
-    needs: test
-    if: ${{ github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop' }}
+    needs: [bootstrap, test]
+    if: ${{needs.bootstrap.outputs.needs-build == 'true'}}
     runs-on: ubuntu-latest
     steps:
+      - run: |
+        echo "${{toJSON(needs.bootstrap.outputs)}}"
       - uses: actions/checkout@v2
+        with:
+          ref: ${{needs.bootstrap.outputs.ref}}
       - name: Use Node.js 12.16
         uses: actions/setup-node@v1
         with:
