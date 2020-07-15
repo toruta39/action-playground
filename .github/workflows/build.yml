@@ -85,7 +85,6 @@ jobs:
         env:
           NODE_ENV: ${{needs.bootstrap.outputs.env}}
         run: |
-          echo $NODE_ENV
           npm run build
         working-directory: client
       - name: Alert
