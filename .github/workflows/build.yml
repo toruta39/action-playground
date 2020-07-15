@@ -1,0 +1,52 @@
+name: build
+on:
+  push:
+    paths:
+      - .github/workflows/build.yml
+      - client/**
+  repository_dispatch:
+jobs:
+  debug:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "${{toJSON(github.event)}}"
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js 12.16
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.16
+      - name: Install dependencies
+        run: |
+          npm install
+        working-directory: client
+      - name: Run tests
+        run: |
+          npm test
+        working-directory: client
+  build:
+    name: Build
+    needs: test
+    if: ${{ github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js 12.16
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.16
+      - name: Install dependencies
+        run: |
+          npm install
+        working-directory: client
+      - name: Build
+        run: |
+          npm run build
+        working-directory: client
+      - name: Alert
+        if: failure()
+        run: |
+          echo 'Failed'
