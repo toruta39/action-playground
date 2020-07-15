@@ -1,18 +1,18 @@
-# on: pull_request
-# jobs:
-#   some_job:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - uses: actions/checkout@v2
-#       - run: |
-#           git fetch origin ${{ github.base_ref }}
-#           git checkout ${{ github.base_ref }}
-#           git checkout ${{ github.head_ref }}
-#       - id: check_pr_changes
-#       uses: toruta39/action-playground/actions/post-release@master
-#         with:
-#           watchlist: |
-#             README.md
-#       - if: ${{steps.check_pr_changes.outputs.hit == 'true'}}
-#         run: echo "hit"
-#       - run: echo "changelist: \n${{ steps.check_pr_changes.outputs.changelist }}"
+on: pull_request
+jobs:
+  some_job:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      # - run: |
+      #     git fetch origin ${{ github.base_ref }}
+      #     git checkout ${{ github.base_ref }}
+      #     git checkout ${{ github.head_ref }}
+      # - id: check_pr_changes
+      # uses: toruta39/action-playground/actions/post-release@master
+      #   with:
+      #     watchlist: |
+      #       README.md
+      # - if: ${{steps.check_pr_changes.outputs.hit == 'true'}}
+      #   run: echo "hit"
+      # - run: echo "changelist: \n${{ steps.check_pr_changes.outputs.changelist }}"
