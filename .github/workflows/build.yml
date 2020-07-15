@@ -83,7 +83,7 @@ jobs:
         working-directory: client
       - name: Build
         env:
-          NODE_ENV: ${{needs.bootstrap.outputs.env}}}
+          NODE_ENV: ${{needs.bootstrap.outputs.env}}
         run: |
           echo $NODE_ENV
           npm run build
